@@ -3,41 +3,63 @@ import User from "../models/User.js";
 export const accessChat = async (req, res) => {
   try {
     const { userId } = req.body;
+
     if (!userId) {
       throw new Error("User id not sent");
     }
-    var isChat = await Chat.find({
+
+    let isChat = await Chat.find({
       isGroupChat: false,
       $and: [
-        { users: { $elemMatch: { $eq: req.user._id } } },
-        { users: { $elemMatch: { $eq: userId } } },
+        {
+          users: {
+            $elemMatch: {
+              $eq: req.user._id,
+            },
+          },
+        },
+        {
+          users: {
+            $elemMatch: {
+              $eq: userId,
+            },
+          },
+        },
       ],
     })
       .populate("users", "-password")
       .populate("latestMessage");
+
     isChat = await User.populate(isChat, {
       path: "latestMessage.sender",
       select: "name pic email",
     });
-    if (isChat) {
-      res.send(isChat);
+
+    // Chat already exists
+    if (isChat.length > 0) {
+      res.status(200).json(isChat[0]);
     } else {
-      var chatData = {
+      // Create new chat
+      const chatData = {
         chatName: "sender",
         isGroupChat: false,
         users: [req.user._id, userId],
       };
+
       const createdChat = await Chat.create(chatData);
-      const FullChat = await Chat.findOne({ _id: createdChat._id }).populate(
-        "users",
-        "-password",
-      );
-      res.status(200).json(FullChat);
+
+      const fullChat = await Chat.findOne({
+        _id: createdChat._id,
+      }).populate("users", "-password");
+
+      res.status(200).json(fullChat);
     }
   } catch (error) {
+    console.error("Access Chat Error:", error);
+
     res.status(400).json({
       success: false,
-      message: err.message,
+      message: error.message,
     });
   }
 };

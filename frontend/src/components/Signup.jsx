@@ -85,7 +85,7 @@ const Signup = () => {
       }
 
       const response = await axios.post("/api/user", data);
-      localStorage.setItem("userInfo",JSON.stringify(data));
+      localStorage.setItem("userInfo",JSON.stringify(response.data));
       toast.success(response.data.message);
       navigate('/chats');
     } catch (error) {

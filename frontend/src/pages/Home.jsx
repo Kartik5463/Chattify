@@ -1,15 +1,11 @@
-
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  MessageCircle,
-  Zap,
-  Users,
-  Heart,
-} from "lucide-react";
+import { MessageCircle, Zap, Users, Heart } from "lucide-react";
 
 import Login from "../components/Login";
 import Signup from "../components/Signup";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const floatingMessages = [
   {
@@ -42,12 +38,23 @@ const floatingMessages = [
   },
 ];
 
+const particles = Array.from({ length: 25 }, (_, index) => ({
+  id: index,
+  left: `${(index * 37) % 100}%`,
+  top: `${(index * 61) % 100}%`,
+  duration: 3 + ((index * 17) % 40) / 10,
+  delay: ((index * 13) % 50) / 10,
+}));
+
 const Home = () => {
   const [activeTab, setActiveTab] = useState("login");
-
+  const navigate = useNavigate();
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("userInfo"));
+    if (user)navigate("/chats");
+  }, [navigate]);
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#030712] flex items-center justify-center p-4">
-
       {/* =====================================================
                          BACKGROUND GLOWS
       ====================================================== */}
@@ -175,11 +182,7 @@ const Home = () => {
           }}
           animate={{
             y: [0, -18, 0],
-            rotate: [
-              item.rotate,
-              item.rotate + 3,
-              item.rotate,
-            ],
+            rotate: [item.rotate, item.rotate + 3, item.rotate],
             opacity: [0.35, 0.8, 0.35],
           }}
           transition={{
@@ -189,10 +192,7 @@ const Home = () => {
             ease: "easeInOut",
           }}
         >
-          <MessageCircle
-            size={14}
-            className="text-blue-500"
-          />
+          <MessageCircle size={14} className="text-blue-500" />
 
           {item.text}
         </motion.div>
@@ -202,22 +202,22 @@ const Home = () => {
                            PARTICLES
       ====================================================== */}
 
-      {[...Array(25)].map((_, i) => (
+      {particles.map((particle) => (
         <motion.div
-          key={i}
+          key={particle.id}
           className="absolute w-[2px] h-[2px] rounded-full bg-blue-400/50"
           style={{
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
+            left: particle.left,
+            top: particle.top,
           }}
           animate={{
             y: [0, -40, 0],
             opacity: [0, 0.8, 0],
           }}
           transition={{
-            duration: 3 + Math.random() * 4,
+            duration: particle.duration,
             repeat: Infinity,
-            delay: Math.random() * 5,
+            delay: particle.delay,
           }}
         />
       ))}
@@ -243,7 +243,6 @@ const Home = () => {
         }}
         className="relative z-10 w-full max-w-[360px]"
       >
-
         {/* Small brand */}
         <motion.div
           initial={{ opacity: 0, y: -10 }}
@@ -251,7 +250,6 @@ const Home = () => {
           transition={{ delay: 0.2 }}
           className="flex flex-col items-center mb-5"
         >
-
           <motion.div
             className="
               w-12 h-12
@@ -277,21 +275,14 @@ const Home = () => {
             Chatt<span className="text-blue-500">ify</span>
           </h1>
 
-          <p className="text-gray-600 text-xs mt-1">
-            Connect. Chat. Share.
-          </p>
-
+          <p className="text-gray-600 text-xs mt-1">Connect. Chat. Share.</p>
         </motion.div>
 
         {/* =================================================
                            SMALL CARD
         ================================================== */}
 
-        <motion.div
-          className="relative"
-          whileHover={{ y: -2 }}
-        >
-
+        <motion.div className="relative" whileHover={{ y: -2 }}>
           {/* Glow behind card */}
           <motion.div
             className="
@@ -321,13 +312,11 @@ const Home = () => {
               shadow-[0_25px_70px_rgba(0,0,0,0.65)]
             "
           >
-
             {/* =================================================
                               TABS
             ================================================== */}
 
             <div className="relative flex bg-gray-950/80 rounded-xl p-1">
-
               <motion.div
                 className="
                   absolute
@@ -337,10 +326,7 @@ const Home = () => {
                   shadow-[0_4px_20px_rgba(37,99,235,0.3)]
                 "
                 animate={{
-                  left:
-                    activeTab === "login"
-                      ? "4px"
-                      : "50%",
+                  left: activeTab === "login" ? "4px" : "50%",
                   width: "calc(50% - 4px)",
                 }}
                 transition={{
@@ -387,7 +373,6 @@ const Home = () => {
               >
                 Sign Up
               </button>
-
             </div>
 
             {/* =================================================
@@ -395,7 +380,6 @@ const Home = () => {
             ================================================== */}
 
             <AnimatePresence mode="wait">
-
               <motion.div
                 key={activeTab}
                 initial={{
@@ -415,11 +399,8 @@ const Home = () => {
                 }}
                 className="text-center mt-5 mb-4"
               >
-
                 <h2 className="text-xl font-bold text-white">
-                  {activeTab === "login"
-                    ? "Welcome back"
-                    : "Create account"}
+                  {activeTab === "login" ? "Welcome back" : "Create account"}
                 </h2>
 
                 <p className="text-gray-600 text-xs mt-1">
@@ -427,9 +408,7 @@ const Home = () => {
                     ? "Good to see you again."
                     : "Start chatting with your friends."}
                 </p>
-
               </motion.div>
-
             </AnimatePresence>
 
             {/* =================================================
@@ -437,14 +416,11 @@ const Home = () => {
             ================================================== */}
 
             <AnimatePresence mode="wait">
-
               <motion.div
                 key={activeTab}
                 initial={{
                   opacity: 0,
-                  x: activeTab === "login"
-                    ? -12
-                    : 12,
+                  x: activeTab === "login" ? -12 : 12,
                 }}
                 animate={{
                   opacity: 1,
@@ -452,26 +428,17 @@ const Home = () => {
                 }}
                 exit={{
                   opacity: 0,
-                  x: activeTab === "login"
-                    ? 12
-                    : -12,
+                  x: activeTab === "login" ? 12 : -12,
                 }}
                 transition={{
                   duration: 0.3,
                 }}
                 className="px-2 pb-2"
               >
-                {activeTab === "login" ? (
-                  <Login />
-                ) : (
-                  <Signup />
-                )}
+                {activeTab === "login" ? <Login /> : <Signup />}
               </motion.div>
-
             </AnimatePresence>
-
           </div>
-
         </motion.div>
 
         {/* =================================================
@@ -484,30 +451,17 @@ const Home = () => {
           transition={{ delay: 0.7 }}
           className="flex justify-center gap-6 mt-5"
         >
+          <MiniFeature icon={<Zap size={12} />} text="Fast" />
 
-          <MiniFeature
-            icon={<Zap size={12} />}
-            text="Fast"
-          />
+          <MiniFeature icon={<Users size={12} />} text="Connect" />
 
-          <MiniFeature
-            icon={<Users size={12} />}
-            text="Connect"
-          />
-
-          <MiniFeature
-            icon={<Heart size={12} />}
-            text="Share"
-          />
-
+          <MiniFeature icon={<Heart size={12} />} text="Share" />
         </motion.div>
 
         <p className="text-center text-gray-700 text-[10px] mt-4">
           © 2026 Chattify
         </p>
-
       </motion.div>
-
     </div>
   );
 };
@@ -521,9 +475,7 @@ const MiniFeature = ({ icon, text }) => {
       }}
       className="flex items-center gap-1.5 text-gray-600 text-xs"
     >
-      <span className="text-blue-500">
-        {icon}
-      </span>
+      <span className="text-blue-500">{icon}</span>
 
       {text}
     </motion.div>
