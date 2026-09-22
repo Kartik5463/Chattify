@@ -12,9 +12,11 @@ import {
 } from "lucide-react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { useChatStore } from "../stores/chatStore";
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate=useNavigate();
+  const setUser = useChatStore((state) => state.setUser);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -45,6 +47,7 @@ const Login = () => {
     const response = await axios.post("/api/user/login", data);
 
     localStorage.setItem("userInfo", JSON.stringify(response.data));
+    setUser(response.data);
 
     toast.success(response.data.message);
 

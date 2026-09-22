@@ -16,7 +16,7 @@ import { getSender } from "../../config/ChatLogics";
 
 import UserListItem from "../userAvatar/UserListItem";
 
-import { ChatState } from "../../Context/ChatProvider";
+import { useChatStore } from "../../stores/chatStore";
 
 function SideDrawer() {
   const [search, setSearch] = useState("");
@@ -34,12 +34,13 @@ function SideDrawer() {
     setNotification,
     chats,
     setChats,
-  } = ChatState();
+  } = useChatStore();
 
   const navigate = useNavigate();
 
   const logoutHandler = () => {
     localStorage.removeItem("userInfo");
+    useChatStore.getState().setUser(undefined);
     navigate("/");
   };
 
@@ -172,10 +173,8 @@ function SideDrawer() {
                     key={notif._id}
                     onClick={() => {
                       setSelectedChat(notif.chat);
-                      setNotification(
-                        notification.filter(
-                          (n) => n !== notif
-                        )
+                      setNotification((previous) =>
+                        previous.filter((item) => item._id !== notif._id)
                       );
                       setShowNotifications(false);
                     }}

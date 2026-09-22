@@ -2,11 +2,11 @@ import { useState } from "react";
 import SideDrawer from "../components/miscelleneous/SideDrawer";
 import MyChats from "../components/miscelleneous/MyChats";
 import Chatbox from "../components/miscelleneous/ChatBox";
-import { ChatState } from "../Context/ChatProvider";
+import { useChatStore } from "../stores/chatStore";
 
 const Chats = () => {
   const [fetchAgain, setFetchAgain] = useState(false);
-  const { user } = ChatState();
+  const user = useChatStore((state) => state.user);
 
   return (
     <div className="w-full min-h-screen bg-slate-950">

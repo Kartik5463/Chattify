@@ -8,7 +8,7 @@ import { getSender, getSenderFull } from "../config/ChatLogics";
 import ProfileModal from "./miscelleneous/ProfileModal";
 import ScrollableChat from "./ScrollableChat";
 import UpdateGroupChatModal from "./miscelleneous/UpdateGroupChatModal";
-import { ChatState } from "../Context/ChatProvider";
+import { useChatStore } from "../stores/chatStore";
 import { API_URL } from "../config/api";
 
 const SingleChat = ({ setFetchAgain }) => {
@@ -23,7 +23,7 @@ const SingleChat = ({ setFetchAgain }) => {
   const socketRef = useRef(null);
   const selectedChatRef = useRef(null);
   const typingTimeoutRef = useRef(null);
-  const { selectedChat, setSelectedChat, user, setNotification } = ChatState();
+  const { selectedChat, setSelectedChat, user, setNotification } = useChatStore();
 
   const fetchMessages = useCallback(async () => {
     if (!selectedChat?._id || !user?.token) return;
@@ -37,7 +37,7 @@ const SingleChat = ({ setFetchAgain }) => {
     } finally {
       setLoading(false);
     }
-  }, [selectedChat?._id, user?.token]);
+  }, [selectedChat, user]);
 
   useEffect(() => {
     selectedChatRef.current = selectedChat;

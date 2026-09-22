@@ -8,13 +8,13 @@ import { getSender, getSenderFull } from "../../config/ChatLogics";
 
 import ChatLoading from "../ChatLoading";
 
-import { ChatState } from "../../Context/ChatProvider";
+import { useChatStore } from "../../stores/chatStore";
 
 import toast from "react-hot-toast";
 import GroupChatModal from "./GroupChatModel";
 
 const MyChats = ({ fetchAgain }) => {
-  const { selectedChat, setSelectedChat, user, chats, setChats } = ChatState();
+  const { selectedChat, setSelectedChat, user, chats, setChats } = useChatStore();
   const fetchChats = async () => {
     if (!user?.token) return;
 

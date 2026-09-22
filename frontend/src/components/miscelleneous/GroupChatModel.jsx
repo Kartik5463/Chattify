@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState, useRef, useCallback } from "react";
 import toast from "react-hot-toast";
 import { X } from "lucide-react";
-import { ChatState } from "../../Context/ChatProvider";
+import { useChatStore } from "../../stores/chatStore";
 import UserBadgeItem from "../userAvatar/UserBadgeItem";
 import UserListItem from "../userAvatar/UserListItem";
 
@@ -16,7 +16,7 @@ const GroupChatModal = ({ children }) => {
 
   const debounceRef = useRef(null);
 
-  const { user, chats, setChats } = ChatState();
+  const { user, chats, setChats } = useChatStore();
 
   const onOpen = () => setIsOpen(true);
   const onClose = () => {

@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { Eye, X, Loader2, Users, Search } from "lucide-react";
-import { ChatState } from "../../Context/ChatProvider";
+import { useChatStore } from "../../stores/chatStore";
 import UserBadgeItem from "../userAvatar/UserBadgeItem";
 import UserListItem from "../userAvatar/UserListItem";
 const UpdateGroupChatModal = ({ fetchMessages, setFetchAgain }) => {
@@ -14,7 +14,7 @@ const UpdateGroupChatModal = ({ fetchMessages, setFetchAgain }) => {
   const [renameloading, setRenameLoading] = useState(false);
   const onOpen = () => setIsOpen(true);
   const onClose = () => setIsOpen(false);
-  const { selectedChat, setSelectedChat, user } = ChatState();
+  const { selectedChat, setSelectedChat, user } = useChatStore();
   const handleSearch = async (query) => {
     setSearch(query);
     if (!query) {

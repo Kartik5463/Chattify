@@ -15,10 +15,12 @@ import {
 import uploadToCloudinary from "../config/uploadToCloudinary";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { useChatStore } from "../stores/chatStore";
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate=useNavigate();
+  const setUser = useChatStore((state) => state.setUser);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -86,6 +88,7 @@ const Signup = () => {
 
       const response = await axios.post("/api/user", data);
       localStorage.setItem("userInfo",JSON.stringify(response.data));
+      setUser(response.data);
       toast.success(response.data.message);
       navigate('/chats');
     } catch (error) {

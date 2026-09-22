@@ -1,9 +1,9 @@
 import ScrollableFeed from "react-scrollable-feed";
 import { isLastMessage, isSameSender, isSameUser } from "../config/ChatLogics";
-import { ChatState } from "../Context/ChatProvider";
+import { useChatStore } from "../stores/chatStore";
 
 const ScrollableChat = ({ messages }) => {
-  const { user } = ChatState();
+  const user = useChatStore((state) => state.user);
 
   if (!messages?.length) {
     return (

@@ -1,8 +1,17 @@
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useNavigate } from 'react-router-dom'
+import { useEffect } from "react";
 import Home from './pages/Home'
 import Chats from './pages/Chats'
 import { Toaster } from "react-hot-toast";
+import { useChatStore } from "./stores/chatStore";
 const App = () => {
+  const navigate = useNavigate();
+  const user = useChatStore((state) => state.user);
+
+  useEffect(() => {
+    if (!user) navigate("/", { replace: true });
+  }, [navigate, user]);
+
   return (
     <>
     <Toaster
