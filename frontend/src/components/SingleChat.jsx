@@ -9,7 +9,7 @@ import ProfileModal from "./miscelleneous/ProfileModal";
 import ScrollableChat from "./ScrollableChat";
 import UpdateGroupChatModal from "./miscelleneous/UpdateGroupChatModal";
 import { useChatStore } from "../stores/chatStore";
-import { API_URL } from "../config/api";
+import { SOCKET_URL } from "../config/api";
 
 const SingleChat = ({ setFetchAgain }) => {
   const [messages, setMessages] = useState([]);
@@ -48,10 +48,11 @@ const SingleChat = ({ setFetchAgain }) => {
 
   useEffect(() => {
     if (!user) return undefined;
-    const currentSocket = io(API_URL);
+    const currentSocket = io(SOCKET_URL);
     socketRef.current = currentSocket;
     currentSocket.emit("setup", user);
     currentSocket.on("connected", () => setSocketConnected(true));
+    currentSocket.on("connect_error", () => setSocketConnected(false));
     currentSocket.on("typing", ({ name }) => {
       setTypingUserName(name || "Someone");
       setIsTyping(true);
@@ -64,6 +65,7 @@ const SingleChat = ({ setFetchAgain }) => {
       clearTimeout(typingTimeoutRef.current);
       currentSocket.disconnect();
       socketRef.current = null;
+      setSocketConnected(false);
     };
   }, [user]);
 
@@ -71,9 +73,9 @@ const SingleChat = ({ setFetchAgain }) => {
     const currentSocket = socketRef.current;
     if (!currentSocket) return undefined;
     const receiveMessage = (incomingMessage) => {
+      setFetchAgain((previous) => !previous);
       if (selectedChatRef.current?._id !== incomingMessage.chat._id) {
         setNotification((previous) => previous.some((message) => message._id === incomingMessage._id) ? previous : [incomingMessage, ...previous]);
-        setFetchAgain((previous) => !previous);
         return;
       }
       setMessages((previous) => previous.some((message) => message._id === incomingMessage._id) ? previous : [...previous, incomingMessage]);
