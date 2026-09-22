@@ -42,7 +42,7 @@ const ProfileModal = ({ user, children }) => {
             {/* Header */}
             <div className="relative flex items-center justify-center border-b border-[#1c2540] px-6 py-5">
 
-              <h2 className="font-['Work_Sans'] text-2xl font-medium tracking-tight text-[#f1e9d8]">
+              <h2 className="font-display text-2xl font-medium tracking-tight text-[#f1e9d8]">
                 {user.name}
               </h2>
 

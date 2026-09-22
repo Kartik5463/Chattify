@@ -124,7 +124,7 @@ function SideDrawer() {
         </button>
 
         {/* TITLE */}
-        <h1 className="font-['Work_Sans'] text-2xl font-semibold tracking-tight text-white">
+        <h1 className="font-display text-2xl font-semibold tracking-tight text-white">
           Chatti<span className="text-[#3b82f6]">fy</span>
         </h1>
 

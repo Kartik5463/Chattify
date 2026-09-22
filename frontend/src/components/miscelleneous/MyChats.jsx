@@ -61,7 +61,7 @@ const MyChats = ({ fetchAgain }) => {
           px-2
           text-[26px]
           md:text-[28px]
-          font-['Work_Sans']
+          font-display
           font-medium
           tracking-tight
           flex
