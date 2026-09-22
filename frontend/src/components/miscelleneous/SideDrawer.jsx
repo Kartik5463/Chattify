@@ -17,6 +17,7 @@ import { getSender } from "../../config/ChatLogics";
 import UserListItem from "../userAvatar/UserListItem";
 
 import { useChatStore } from "../../stores/chatStore";
+import { logoutUser } from "../../config/api";
 
 function SideDrawer() {
   const [search, setSearch] = useState("");
@@ -39,8 +40,7 @@ function SideDrawer() {
   const navigate = useNavigate();
 
   const logoutHandler = () => {
-    localStorage.removeItem("userInfo");
-    useChatStore.getState().setUser(undefined);
+    logoutUser();
     navigate("/");
   };
 
