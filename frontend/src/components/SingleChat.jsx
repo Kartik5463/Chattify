@@ -9,8 +9,7 @@ import ProfileModal from "./miscelleneous/ProfileModal";
 import ScrollableChat from "./ScrollableChat";
 import UpdateGroupChatModal from "./miscelleneous/UpdateGroupChatModal";
 import { ChatState } from "../Context/ChatProvider";
-
-const ENDPOINT = "http://localhost:5000";
+import { API_URL } from "../config/api";
 
 const SingleChat = ({ setFetchAgain }) => {
   const [messages, setMessages] = useState([]);
@@ -49,7 +48,7 @@ const SingleChat = ({ setFetchAgain }) => {
 
   useEffect(() => {
     if (!user) return undefined;
-    const currentSocket = io(ENDPOINT);
+    const currentSocket = io(API_URL);
     socketRef.current = currentSocket;
     currentSocket.emit("setup", user);
     currentSocket.on("connected", () => setSocketConnected(true));

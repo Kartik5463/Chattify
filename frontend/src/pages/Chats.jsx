@@ -1,10 +1,10 @@
 import { useState } from "react";
 import SideDrawer from "../components/miscelleneous/SideDrawer";
 import MyChats from "../components/miscelleneous/MyChats";
-import Chatbox from "../components/miscelleneous/Chatbox";
+import Chatbox from "../components/miscelleneous/ChatBox";
 import { ChatState } from "../Context/ChatProvider";
 
-const Chatpage = () => {
+const Chats = () => {
   const [fetchAgain, setFetchAgain] = useState(false);
   const { user } = ChatState();
 
@@ -22,4 +22,4 @@ const Chatpage = () => {
   );
 };
 
-export default Chatpage;
+export default Chats;
